@@ -16,7 +16,7 @@ export class AdminService {
 
         
       ) {}
-    async cemp(adminDto: AdminDto){
+    async cadmin(adminDto: AdminDto){
        //const createEmployee=await new this.AdminModel(adminDto);
        //return createEmployee.save();
        const existingUser = await this.AdminModel.findOne({
@@ -25,29 +25,29 @@ export class AdminService {
       if (existingUser) {
         throw new HttpException('Email taken', 403);
       }
-      const createdEmployee = new this.AdminModel(adminDto);
+      const createdAdmin = new this.AdminModel(adminDto);
   
-      createdEmployee.password = await bcrypt.hash(createdEmployee.password, 10);
-      return await createdEmployee.save();
+      createdAdmin.password = await bcrypt.hash(createdAdmin.password, 10);
+      return await createdAdmin.save();
       }
       async loginAdmin(adminDto: AdminDto,res): Promise<string> {
-        const checkEmployee = await this.AdminModel.findOne({
+        const checkAdmin = await this.AdminModel.findOne({
           adminname: adminDto.adminname,
         });
     
-        if (!checkEmployee) {
-          throw new HttpException('No Employee found', 404);
+        if (!checkAdmin) {
+          throw new HttpException('No Admin found', 404);
         }
     
         const passwordCheck = await bcrypt.compare(
           adminDto.password,
-          checkEmployee.password,
+          checkAdmin.password,
         );
         if (!passwordCheck) {
           throw new HttpException('Incorrect Password', 401);
         }
         const token= await this.GenerateJwt(
-        checkEmployee.adminname);
+        checkAdmin.adminname);
         res.cookie('admonlogoutcookie',token) 
         return token
           
@@ -60,7 +60,7 @@ export class AdminService {
       }
       public async logout( res) {
         res.clearCookie('admonlogoutcookie');
-        res.end('User logged out sucessfuly');
+        res.end('Admin logged out sucessfuly');
       }
       
       

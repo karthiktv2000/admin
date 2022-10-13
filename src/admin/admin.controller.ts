@@ -13,11 +13,11 @@ export class AdminController {
         
     ){}
     @Post()
-  async cemp( @Res() res , @Body() adminDto: AdminDto) {
+  async cadmin( @Res() res , @Body() adminDto: AdminDto) {
     
     res.status(201).json({
         message: 'Successfully Added Admin',
-        result: await this.adminService.cemp(adminDto),
+        result: await this.adminService.cadmin(adminDto),
 
       });
   }
